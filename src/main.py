@@ -2,7 +2,7 @@
 
 import logging
 from collections.abc import Callable
-from enum import StrEnum
+from enum import Enum
 from functools import partial
 from pathlib import Path
 from pprint import pformat
@@ -69,9 +69,9 @@ PROJECT_ROOT = path = pyrootutils.find_root(
 load_dotenv()
 
 
-class SpecialTokens(StrEnum):
+# pathc to make it work on 3.10
+class SpecialTokens(str, Enum):
     """Special tokens for tokenizer."""
-
     PAD = "[PAD]"
     BOS = "[BOS]"
     UNK = "[UNK]"
@@ -79,20 +79,26 @@ class SpecialTokens(StrEnum):
     SEP = "[SEP]"
     CLS = "[CLS]"
     MASK = "[MASK]"
-
+    
+    def __str__(self):
+        """Override str() to return the value directly, mimicking StrEnum behavior."""
+        return self.value
+    
+    def __format__(self, format_spec):
+        """Override format() to return the value directly, mimicking StrEnum behavior."""
+        return self.value.__format__(format_spec)
+    
     @classmethod
     def values(cls):
         """Return a list of the string values of each special token."""
         return list(map(lambda c: c.value, cls))
-
+    
     @property
     def index(self):
         """Return the index of the token in the vocabulary.
-
         Used to get the index of the PAD token when directly modifying tensors.
         """
         return SpecialTokens.values().index(self.value)
-
 
 def pad_collate(
     samples: list[dict[str, Tensor]], pad_token_id: int
