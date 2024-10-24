@@ -12,7 +12,7 @@ np.set_printoptions(precision=4, suppress=True, linewidth=200)
 This will load RWKV-7 "Goose" x070.rc3-2409-2r7a-d1 and inference in GPT-mode (slower than RNN-mode for autoregressive generation)
 '''
 
-args = types.SimpleNamespace()
+# args = types.SimpleNamespace()
 
 # # model download: https://huggingface.co/BlinkDL/temp-latest-training-models/tree/main
 # MODEL_PATH = "/mnt/e/rwkv-x070-rc3-172m-pile-20241011-ctx4k.pth"
