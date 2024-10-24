@@ -18,11 +18,11 @@ args = types.SimpleNamespace()
 # MODEL_PATH = "/mnt/e/rwkv-x070-rc3-172m-pile-20241011-ctx4k.pth"
 # args.n_layer = 12
 # args.ctx_len = 4096
-args.n_embd = 768
+# args.n_embd = 768
 
 # args.vocab_size = 50304 # "pile" model: 50277 padded to 50304   
-from tokenizers import Tokenizer
-tokenizer = Tokenizer.from_file("../RWKV-v4neo/20B_tokenizer.json")
+# from tokenizers import Tokenizer
+# tokenizer = Tokenizer.from_file("../RWKV-v4neo/20B_tokenizer.json")
 
 # DTYPE = torch.bfloat16
 #DTYPE = torch.half
