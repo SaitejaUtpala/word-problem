@@ -40,11 +40,11 @@ from torch.utils.cpp_extension import load
 T = 4096  #args.ctx_len
 HEAD_SIZE = 64 
 
-current_file_path = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "test_repos/abstract_classes"
+cuda_source = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "cuda"
 )
 
-load(name="wkv7", sources=[os.path.join(current_file_path, "cuda/wkv7_op.cpp"), os.path.join(current_file_path, "cuda/wkv7.cu")], is_python_module=False,
+load(name="wkv7", sources=[os.path.join(cuda_source, "wkv7_op.cpp"), os.path.join(cuda_source, "wkv7.cu")], is_python_module=False,
                     verbose=True, extra_cuda_cflags=["-res-usage", "--use_fast_math", "-O3", "-Xptxas -O3", "--extra-device-vectorization", f"-D_N_={HEAD_SIZE}", f"-D_T_={T}"])
 class WKV_7(torch.autograd.Function):
     @staticmethod
