@@ -20,7 +20,7 @@ import argparse
 DTYPE = XTYPE =  torch.float32
 RESCALE_LAYER = -1
 
-HEAD_SIZE = cmd_args.headsz
+HEAD_SIZE = 64
 sequence_length = 1024
 
 from torch.utils.cpp_extension import load
