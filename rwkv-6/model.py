@@ -14,7 +14,7 @@ cuda_source = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "cuda"
 )
 
-wkv6_cuda = load(name="wkv6", sources=[os.path.join(cuda_source, "wkv6_op.cpp"), os.path.join(cuda_source, "wkv6_cuda.cu")],
+load(name="wkv6", sources=[os.path.join(cuda_source, "wkv6_op.cpp"), os.path.join(cuda_source, "wkv6_cuda.cu")], is_python_module=False,
                 verbose=True, extra_cuda_cflags=["-res-usage", "--use_fast_math", "-O3", "-Xptxas -O3", "--extra-device-vectorization", f"-D_N_={HEAD_SIZE_A}", f"-D_T_={CTX_LEN}"])
 
 class WKV_6(torch.autograd.Function):
@@ -38,7 +38,7 @@ class WKV_6(torch.autograd.Function):
             assert u.is_contiguous()
             ctx.save_for_backward(r, k, v, w, u)
             y = torch.empty((B, T, C), device=r.device, dtype=DTYPE, memory_format=torch.contiguous_format)#.uniform_(-100, 100)
-            wkv6_cuda.forward(B, T, C, H, r, k, v, w, u, y)
+            torch.ops.wkv6.forward(B, T, C, H, r, k, v, w, u, y)
             return y
 
     @staticmethod
@@ -56,7 +56,7 @@ class WKV_6(torch.autograd.Function):
             gv = torch.empty((B, T, C), device=gy.device, requires_grad=False, dtype=DTYPE, memory_format=torch.contiguous_format)#.uniform_(-100, 100)
             gw = torch.empty((B, T, C), device=gy.device, requires_grad=False, dtype=DTYPE, memory_format=torch.contiguous_format)#.uniform_(-100, 100)
             gu = torch.empty((B, C), device=gy.device, requires_grad=False, dtype=DTYPE, memory_format=torch.contiguous_format)#.uniform_(-100, 100)
-            wkv6_cuda.backward(B, T, C, H, r, k, v, w, u, gy, gr, gk, gv, gw, gu)
+            torch.ops.wkv6.backward(B, T, C, H, r, k, v, w, u, gy, gr, gk, gv, gw, gu)
             gu = torch.sum(gu, 0).view(H, C//H)
             return (None, None, None, None, gr, gk, gv, gw, gu) # return gradients for r,k,v,w,u
 
