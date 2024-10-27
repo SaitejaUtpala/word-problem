@@ -78,7 +78,7 @@ class RWKV_Tmix_x060(nn.Module):
         assert args.dim_att % self.n_head == 0
 
         with torch.no_grad():
-            ratio_0_to_1 = layer_id / (args.n_layer - 1)  # 0 to 1
+            ratio_0_to_1 = layer_id / args.n_layer if args.n_layer > 1 else 0
             ratio_1_to_almost0 = 1.0 - (layer_id / args.n_layer)  # 1 to ~0
             ddd = torch.ones(1, 1, args.n_embd)
             for i in range(args.n_embd):
