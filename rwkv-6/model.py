@@ -14,7 +14,7 @@ cuda_source = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "cuda"
 )
 
-wkv6_cuda = load(name="wkv6", sources=[os.path.join(cuda_source, "wkv6_op.cpp"), os.path.join(cuda_source, "wkv6_cuda.cu")], is_python_module=False,
+wkv6_cuda = load(name="wkv6", sources=[os.path.join(cuda_source, "wkv6_op.cpp"), os.path.join(cuda_source, "wkv6_cuda.cu")],
                 verbose=True, extra_cuda_cflags=["-res-usage", "--use_fast_math", "-O3", "-Xptxas -O3", "--extra-device-vectorization", f"-D_N_={HEAD_SIZE_A}", f"-D_T_={CTX_LEN}"])
 
 class WKV_6(torch.autograd.Function):
